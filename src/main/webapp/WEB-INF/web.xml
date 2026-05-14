@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <display-name>Clothify</display-name>
+
+    <!-- First page will open login.html -->
+    <welcome-file-list>
+        <welcome-file>login.html</welcome-file>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>home</welcome-file>
+    </welcome-file-list>
+
+    <!-- Send OTP Servlet -->
+    <servlet>
+        <servlet-name>SendOtpServlet</servlet-name>
+        <servlet-class>com.clothify.SendOtpServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SendOtpServlet</servlet-name>
+        <url-pattern>/send-otp</url-pattern>
+    </servlet-mapping>
+
+    <!-- Verify OTP Servlet -->
+    <servlet>
+        <servlet-name>VerifyOtpServlet</servlet-name>
+        <servlet-class>com.clothify.VerifyOtpServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>VerifyOtpServlet</servlet-name>
+        <url-pattern>/verify-otp</url-pattern>
+    </servlet-mapping>
+
+    <!-- Cashfree Create Order Servlet -->
+    <servlet>
+        <servlet-name>CreateCashfreeOrderServlet</servlet-name>
+        <servlet-class>com.clothify.CreateCashfreeOrderServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CreateCashfreeOrderServlet</servlet-name>
+        <url-pattern>/create-cashfree-order</url-pattern>
+    </servlet-mapping>
+
+    <!-- Cashfree Success Servlet -->
+    <servlet>
+        <servlet-name>CashfreeSuccessServlet</servlet-name>
+        <servlet-class>com.clothify.CashfreeSuccessServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CashfreeSuccessServlet</servlet-name>
+        <url-pattern>/cashfree-success</url-pattern>
+    </servlet-mapping>
+
+</web-app>

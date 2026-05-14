@@ -1,0 +1,11 @@
+target/
+.classpath
+.project
+.settings/
+.metadata/
+*.class
+*.log
+.DS_Store
+
+apache-tomcat-*/
+Servers/

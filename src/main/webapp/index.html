@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Clothify</title>
+    <link rel="stylesheet" href="css/style.css?v=25000">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="brand">
+        <span class="brand-symbol">🛍️</span>
+        <span class="brand-text">Clothify</span>
+    </div>
+
+    <form action="products" method="get" class="search-box">
+        <span class="search-symbol">🔍</span>
+        <input type="text" name="q" placeholder="Search for Products, Brands and More">
+    </form>
+
+    <nav class="main-nav">
+        <a href="home"><span class="nav-symbol">🏠</span> home</a>
+        <a href="products"><span class="nav-symbol">🛍️</span> Products</a>
+        <a href="login.html"><span class="nav-symbol">🔐</span> Login</a>
+        <a href="register.html"><span class="nav-symbol">📝</span> Register</a>
+    </nav>
+</header>
+
+<section class="page-title">
+    <h1>Login</h1>
+    <p>Login to your Clothify account</p>
+</section>
+
+<section class="form-container">
+    <div class="form-box">
+        <h2>User Login</h2>
+
+        <form action="login" method="post">
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter email" required>
+
+            <label>Password</label>
+            <div class="password-box">
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+                <span onclick="togglePassword()">👁️</span>
+            </div>
+
+            <button type="submit">Login</button>
+
+            <p style="text-align:center; margin-top:15px; font-size:16px;">
+                Login with OTP?
+                <a href="mobile-login.html" style="font-weight:bold; color:#ff3f6c;">Click here</a>
+            </p>
+
+            <p style="margin-top:15px; text-align:center;">
+                Don't have an account?
+                <a href="register.html">Register here</a>
+            </p>
+
+        </form>
+    </div>
+</section>
+
+<script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mobile OTP Login - Clothify</title>
+    <link rel="stylesheet" href="css/style.css?v=8000">
+</head>
+<body>
+
+<header class="main-header">
+    <div class="brand">
+        <span class="brand-symbol">🛍️</span>
+        <span class="brand-text">Clothify</span>
+    </div>
+
+    <form action="products" method="get" class="search-box">
+        <span class="search-symbol">🔍</span>
+        <input type="text" name="q" placeholder="Search for Products, Brands and More">
+    </form>
+
+    <nav class="main-nav">
+        <a href="home"><span class="nav-symbol">🏠</span> Home</a>
+        <a href="products"><span class="nav-symbol">🛍️</span> Products</a>
+        <a href="login.html"><span class="nav-symbol">🔐</span> Login</a>
+        <a href="register.html"><span class="nav-symbol">📝</span> Register</a>
+    </nav>
+</header>
+
+<section class="page-title">
+    <h1>Mobile OTP Login</h1>
+    <p>Login using your mobile number</p>
+</section>
+
+<section class="form-container">
+    <div class="form-box">
+        <h2>Enter Mobile Number</h2>
+
+        <form action="send-otp" method="post">
+            <label>Mobile Number</label>
+            <input type="text" name="phone" placeholder="Enter mobile number" required>
+
+            <button type="submit">Send OTP</button>
+        </form>
+
+        <p style="margin-top: 15px; text-align: center;">
+            Login with email?
+            <a href="login.html">Click here</a>
+        </p>
+    </div>
+</section>
+
+</body>
+</html>

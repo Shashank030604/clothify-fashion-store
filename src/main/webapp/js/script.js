@@ -1,0 +1,1 @@
+console.log("Clothify JavaScript connected successfully");
