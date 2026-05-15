@@ -7,11 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+@WebServlet("/orders")
 public class OrdersServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -74,7 +76,7 @@ public class OrdersServlet extends HttpServlet {
                     orderStatus = "Payment Pending";
                 }
 
-                String statusClass = "status-pending";
+                String statusClass;
 
                 if ("Paid".equalsIgnoreCase(orderStatus)) {
                     statusClass = "status-paid";
