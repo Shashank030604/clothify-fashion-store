@@ -1527,6 +1527,57 @@ body {
         width: 100%;
         height: 230px;
     }
+    /* ============================= */
+/* ORDER STATUS BADGE COLORS     */
+/* Add this at bottom of CSS file */
+/* ============================= */
+
+.status-paid {
+    background: #16a34a !important;
+    color: white !important;
+    padding: 12px 26px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-block;
+    min-width: 110px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(22, 163, 74, 0.25);
+}
+
+.status-pending,
+.status-payment-pending {
+    background: #f59e0b !important;
+    color: white !important;
+    padding: 12px 26px;
+    border-radius: 25px;
+    font-weight: bold;
+    display: inline-block;
+    min-width: 150px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(245, 158, 11, 0.25);
+}
+
+/* Optional: keeps badge aligned on right side in My Orders */
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .status-paid,
+    .status-pending,
+    .status-payment-pending {
+        margin-top: 10px;
+    }
+}
 
     .profile-card {
         width: 100%;

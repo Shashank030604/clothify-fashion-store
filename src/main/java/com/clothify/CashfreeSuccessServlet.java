@@ -21,6 +21,7 @@ public class CashfreeSuccessServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String cashfreeOrderId = request.getParameter("order_id");
+        String clothifyOrderIdParam = request.getParameter("clothify_order_id");
 
         if (cashfreeOrderId == null || cashfreeOrderId.trim().isEmpty()) {
             showError(out, "Cashfree order ID not found.");
@@ -32,23 +33,61 @@ public class CashfreeSuccessServlet extends HttpServlet {
         try {
             Connection con = DBConnection.getConnection();
 
-            int userId = 0;
+            int clothifyOrderId = 0;
 
-            // Get user_id from payments table using Cashfree order id
-            String getUserSql = "SELECT user_id FROM payments WHERE cashfree_order_id = ? ORDER BY payment_id DESC LIMIT 1";
-            PreparedStatement getUserPs = con.prepareStatement(getUserSql);
-            getUserPs.setString(1, cashfreeOrderId);
-
-            ResultSet rs = getUserPs.executeQuery();
-
-            if (rs.next()) {
-                userId = rs.getInt("user_id");
+            /*
+             * First try to get Clothify order ID from URL.
+             * Example:
+             * /cashfree-success?order_id=CF_ORDER_123&clothify_order_id=62
+             */
+            if (clothifyOrderIdParam != null && !clothifyOrderIdParam.trim().isEmpty()) {
+                try {
+                    clothifyOrderId = Integer.parseInt(clothifyOrderIdParam.trim());
+                } catch (Exception e) {
+                    clothifyOrderId = 0;
+                }
             }
 
-            rs.close();
-            getUserPs.close();
+            /*
+             * If URL does not contain Clothify order ID,
+             * get user_id from payments table using Cashfree order ID,
+             * then update user's latest order.
+             */
+            if (clothifyOrderId == 0) {
+                int userId = 0;
 
-            // Update payment status
+                String getUserSql = "SELECT user_id FROM payments WHERE cashfree_order_id = ? ORDER BY payment_id DESC LIMIT 1";
+                PreparedStatement getUserPs = con.prepareStatement(getUserSql);
+                getUserPs.setString(1, cashfreeOrderId);
+
+                ResultSet userRs = getUserPs.executeQuery();
+
+                if (userRs.next()) {
+                    userId = userRs.getInt("user_id");
+                }
+
+                userRs.close();
+                getUserPs.close();
+
+                if (userId > 0) {
+                    String getOrderSql = "SELECT order_id FROM orders WHERE user_id = ? ORDER BY order_id DESC LIMIT 1";
+                    PreparedStatement getOrderPs = con.prepareStatement(getOrderSql);
+                    getOrderPs.setInt(1, userId);
+
+                    ResultSet orderRs = getOrderPs.executeQuery();
+
+                    if (orderRs.next()) {
+                        clothifyOrderId = orderRs.getInt("order_id");
+                    }
+
+                    orderRs.close();
+                    getOrderPs.close();
+                }
+            }
+
+            /*
+             * Update payment status as PAID.
+             */
             String updatePaymentSql = "UPDATE payments SET payment_status = ? WHERE cashfree_order_id = ?";
             PreparedStatement updatePaymentPs = con.prepareStatement(updatePaymentSql);
             updatePaymentPs.setString(1, "PAID");
@@ -56,31 +95,17 @@ public class CashfreeSuccessServlet extends HttpServlet {
             updatePaymentPs.executeUpdate();
             updatePaymentPs.close();
 
-            int clothifyOrderId = 0;
-
-            // Update latest pending order of same user as PAID
-            if (userId > 0) {
-                String getOrderSql = "SELECT order_id FROM orders WHERE user_id = ? ORDER BY order_id DESC LIMIT 1";
-                PreparedStatement getOrderPs = con.prepareStatement(getOrderSql);
-                getOrderPs.setInt(1, userId);
-
-                ResultSet orderRs = getOrderPs.executeQuery();
-
-                if (orderRs.next()) {
-                    clothifyOrderId = orderRs.getInt("order_id");
-                }
-
-                orderRs.close();
-                getOrderPs.close();
-
-                if (clothifyOrderId > 0) {
-                    String updateOrderSql = "UPDATE orders SET status = ? WHERE order_id = ?";
-                    PreparedStatement updateOrderPs = con.prepareStatement(updateOrderSql);
-                    updateOrderPs.setString(1, "Paid");
-                    updateOrderPs.setInt(2, clothifyOrderId);
-                    updateOrderPs.executeUpdate();
-                    updateOrderPs.close();
-                }
+            /*
+             * Your orders table column name is order_status.
+             * So every successful Cashfree payment becomes Paid.
+             */
+            if (clothifyOrderId > 0) {
+                String updateOrderSql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
+                PreparedStatement updateOrderPs = con.prepareStatement(updateOrderSql);
+                updateOrderPs.setString(1, "Paid");
+                updateOrderPs.setInt(2, clothifyOrderId);
+                updateOrderPs.executeUpdate();
+                updateOrderPs.close();
             }
 
             con.close();
