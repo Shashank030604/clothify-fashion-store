@@ -7,11 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+@WebServlet("/orders")
 public class OrdersServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +37,7 @@ public class OrdersServlet extends HttpServlet {
         out.println("<head>");
         out.println("<meta charset='UTF-8'>");
         out.println("<title>My Orders - Clothify</title>");
-        out.println("<link rel='stylesheet' href='" + request.getContextPath() + "/css/style.css?v=92000'>");
+        out.println("<link rel='stylesheet' href='" + request.getContextPath() + "/css/style.css?v=98000'>");
         out.println("</head>");
         out.println("<body>");
 
@@ -51,7 +53,7 @@ public class OrdersServlet extends HttpServlet {
         try {
             Connection con = DBConnection.getConnection();
 
-            String orderSql = "SELECT order_id, total_amount, order_status, order_date, payment_method "
+            String orderSql = "SELECT order_id, user_id, total_amount, order_status, order_date, payment_method "
                     + "FROM orders WHERE user_id = ? ORDER BY order_id DESC";
 
             PreparedStatement orderPs = con.prepareStatement(orderSql);
@@ -78,13 +80,16 @@ public class OrdersServlet extends HttpServlet {
 
                 if ("Paid".equalsIgnoreCase(orderStatus)) {
                     statusClass = "status-paid";
-                } else if ("Payment Pending".equalsIgnoreCase(orderStatus) || "Pending".equalsIgnoreCase(orderStatus)) {
+                    orderStatus = "Paid";
+                } else {
                     statusClass = "status-pending";
+                    orderStatus = "Payment Pending";
                 }
 
                 out.println("<div class='order-card'>");
 
                 out.println("<div class='order-header'>");
+
                 out.println("<div>");
                 out.println("<h2>Order ID: #" + orderId + "</h2>");
                 out.println("<p><b>Order Date:</b> " + orderDate + "</p>");
@@ -95,7 +100,9 @@ public class OrdersServlet extends HttpServlet {
                 }
 
                 out.println("</div>");
+
                 out.println("<span class='" + statusClass + "'>" + orderStatus + "</span>");
+
                 out.println("</div>");
 
                 showOrderItems(out, con, orderId);
