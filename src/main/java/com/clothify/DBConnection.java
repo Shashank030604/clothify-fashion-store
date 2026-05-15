@@ -11,15 +11,51 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/fashion_store",
-                "root",
-                "root"
-            );
+            /*
+             * For hosting, values come from Render Environment Variables.
+             * For local Eclipse, if environment variables are empty,
+             * it will use your local MySQL database.
+             */
 
-            System.out.println("Database connected successfully");
+            String host = System.getenv("DB_HOST");
+            String port = System.getenv("DB_PORT");
+            String dbName = System.getenv("DB_NAME");
+            String user = System.getenv("DB_USER");
+            String password = System.getenv("DB_PASSWORD");
+
+            // Local fallback for Eclipse
+            if (host == null || host.isEmpty()) {
+                host = "localhost";
+            }
+
+            if (port == null || port.isEmpty()) {
+                port = "3306";
+            }
+
+            if (dbName == null || dbName.isEmpty()) {
+                dbName = "fashion_store";
+            }
+
+            if (user == null || user.isEmpty()) {
+                user = "root";
+            }
+
+            if (password == null) {
+                password = "";
+            }
+
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName
+                    + "?useSSL=true"
+                    + "&requireSSL=false"
+                    + "&allowPublicKeyRetrieval=true"
+                    + "&serverTimezone=UTC";
+
+            con = DriverManager.getConnection(url, user, password);
+
+            System.out.println("Database Connected Successfully");
 
         } catch (Exception e) {
+            System.out.println("Database Connection Failed");
             e.printStackTrace();
         }
 
