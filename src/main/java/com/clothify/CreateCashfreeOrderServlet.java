@@ -90,9 +90,9 @@ public class CreateCashfreeOrderServlet extends HttpServlet {
         }
 
         /*
-         * Important:
-         * This creates hosted Render return URL.
-         * It will NOT return to localhost.
+         * This return URL works both locally and on Render.
+         * On Render it becomes:
+         * https://clothify-fashion-store.onrender.com/Clothify/cashfree-success?order_id={order_id}
          */
         String baseUrl = getBaseUrl(request);
 
@@ -100,10 +100,11 @@ public class CreateCashfreeOrderServlet extends HttpServlet {
                 + request.getContextPath()
                 + "/cashfree-success?order_id={order_id}";
 
-        String notifyUrl = baseUrl
-                + request.getContextPath()
-                + "/cashfree-success?order_id={order_id}";
-
+        /*
+         * IMPORTANT:
+         * notify_url is removed because Cashfree rejected it.
+         * Only return_url is used.
+         */
         String jsonBody = "{"
                 + "\"order_id\":\"" + escape(cashfreeOrderId) + "\","
                 + "\"order_amount\":" + amount + ","
@@ -115,8 +116,7 @@ public class CreateCashfreeOrderServlet extends HttpServlet {
                 + "\"customer_phone\":\"" + escape(customerPhone) + "\""
                 + "},"
                 + "\"order_meta\":{"
-                + "\"return_url\":\"" + escape(returnUrl) + "\","
-                + "\"notify_url\":\"" + escape(notifyUrl) + "\""
+                + "\"return_url\":\"" + escape(returnUrl) + "\""
                 + "}"
                 + "}";
 
@@ -271,16 +271,17 @@ public class CreateCashfreeOrderServlet extends HttpServlet {
         out.println("<meta charset='UTF-8'>");
         out.println("<title>Cashfree Payment - Clothify</title>");
         out.println("<script src='https://sdk.cashfree.com/js/v3/cashfree.js'></script>");
+
         out.println("<style>");
         out.println("body{margin:0;font-family:Arial;background:linear-gradient(135deg,#f8f7ff,#e8f8ff);min-height:100vh;display:flex;align-items:center;justify-content:center;}");
         out.println(".card{width:90%;max-width:560px;background:white;border-radius:24px;padding:45px 30px;text-align:center;box-shadow:0 15px 35px rgba(0,0,0,0.15);}");
         out.println(".icon{font-size:70px;margin-bottom:15px;}");
         out.println("h1{color:#991b1b;font-size:32px;margin-bottom:12px;}");
         out.println("p{font-size:18px;color:#444;}");
-        out.println(".session{font-size:13px;word-break:break-all;background:#f3f4f6;padding:12px;border-radius:12px;margin:18px 0;}");
         out.println(".btn{border:none;background:#111827;color:white;padding:14px 42px;border-radius:30px;font-size:18px;font-weight:bold;cursor:pointer;margin:10px;}");
         out.println(".back{display:inline-block;text-decoration:none;background:#ff3f6c;color:white;padding:14px 42px;border-radius:30px;font-size:18px;font-weight:bold;margin-top:10px;}");
         out.println("</style>");
+
         out.println("</head>");
         out.println("<body>");
 
@@ -315,6 +316,7 @@ public class CreateCashfreeOrderServlet extends HttpServlet {
         out.println("<head>");
         out.println("<meta charset='UTF-8'>");
         out.println("<title>Cashfree Error - Clothify</title>");
+
         out.println("<style>");
         out.println("body{margin:0;font-family:Arial;background:linear-gradient(135deg,#f8f7ff,#e8f8ff);min-height:100vh;display:flex;align-items:center;justify-content:center;}");
         out.println(".card{width:90%;max-width:560px;background:white;border-radius:24px;padding:45px 30px;text-align:center;box-shadow:0 15px 35px rgba(0,0,0,0.15);}");
@@ -323,6 +325,7 @@ public class CreateCashfreeOrderServlet extends HttpServlet {
         out.println("p{font-size:18px;color:#444;word-break:break-word;}");
         out.println("a{display:inline-block;text-decoration:none;background:#ff3f6c;color:white;padding:14px 42px;border-radius:30px;font-size:18px;font-weight:bold;margin-top:20px;}");
         out.println("</style>");
+
         out.println("</head>");
         out.println("<body>");
         out.println("<div class='card'>");
