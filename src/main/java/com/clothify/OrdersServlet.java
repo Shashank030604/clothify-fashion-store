@@ -7,13 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/orders")
 public class OrdersServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +35,7 @@ public class OrdersServlet extends HttpServlet {
         out.println("<head>");
         out.println("<meta charset='UTF-8'>");
         out.println("<title>My Orders - Clothify</title>");
-        out.println("<link rel='stylesheet' href='" + request.getContextPath() + "/css/style.css?v=98000'>");
+        out.println("<link rel='stylesheet' href='" + request.getContextPath() + "/css/style.css?v=99000'>");
         out.println("</head>");
         out.println("<body>");
 
