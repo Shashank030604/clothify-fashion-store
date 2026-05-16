@@ -11,46 +11,30 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            /*
-             * For hosting, values come from Render Environment Variables.
-             * For local Eclipse, if environment variables are empty,
-             * it will use your local MySQL database.
-             */
-
-            String host = System.getenv("DB_HOST");
-            String port = System.getenv("DB_PORT");
+            String dbHost = System.getenv("DB_HOST");
+            String dbPort = System.getenv("DB_PORT");
             String dbName = System.getenv("DB_NAME");
-            String user = System.getenv("DB_USER");
-            String password = System.getenv("DB_PASSWORD");
+            String dbUser = System.getenv("DB_USER");
+            String dbPassword = System.getenv("DB_PASSWORD");
 
-            // Local fallback for Eclipse
-            if (host == null || host.isEmpty()) {
-                host = "localhost";
+            if (dbHost == null || dbPort == null || dbName == null || dbUser == null || dbPassword == null) {
+                System.out.println("Database environment variables are missing.");
+                return null;
             }
 
-            if (port == null || port.isEmpty()) {
-                port = "3306";
-            }
+            dbHost = dbHost.trim();
+            dbPort = dbPort.trim();
+            dbName = dbName.trim();
+            dbUser = dbUser.trim();
+            dbPassword = dbPassword.trim();
 
-            if (dbName == null || dbName.isEmpty()) {
-                dbName = "fashion_store";
-            }
-
-            if (user == null || user.isEmpty()) {
-                user = "root";
-            }
-
-            if (password == null) {
-                password = "";
-            }
-
-            String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName
-                    + "?useSSL=true"
-                    + "&requireSSL=false"
+            String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName
+                    + "?sslMode=REQUIRED"
                     + "&allowPublicKeyRetrieval=true"
+                    + "&useSSL=true"
                     + "&serverTimezone=UTC";
 
-            con = DriverManager.getConnection(url, user, password);
+            con = DriverManager.getConnection(url, dbUser, dbPassword);
 
             System.out.println("Database Connected Successfully");
 
